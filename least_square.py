@@ -7,7 +7,7 @@ numclassType = len(classTypes)
 objVec = getObjVec()
 
 ## concatenate vectors into matrix
-dim = (100, numclassType)
+dim = (1000, numclassType)
 classMatrix = np.zeros(dim)
 for i in range(numclassType):
 	classMatrix[:,i] = classTypes[i]
