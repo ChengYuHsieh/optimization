@@ -93,10 +93,12 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
                                     for j in range(numIntvl):
                                         if classMat[co,j] == 1:
                                             WU[j] += 1
+                                            sumPsVec[j] += 1
                                         if classMat[ci,j] == 1:
                                             WU[j] -= 1
+                                            sumPsVec[j] -= 1
                                     for k in range(i):
-                                        if WU[k] < 0:
+                                        if WU[k] < 0 or sumPsVec[k] < 0:
                                             WAs[s,co] += 1
                                             WAs[s,ci] -= 1
                                             hasMoved = False
@@ -113,16 +115,6 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
                         break
             if hasMoved == False:
                 WU[i] = 0
-
-
-
-
-
-
-
-
-
-
 
 
 def main():
