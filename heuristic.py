@@ -129,6 +129,14 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
                         break
             if hasMoved == False:
                 WU[i] = 0
+    
+    print "WAs:"
+    print WAs
+    print "WAm:"
+    print WAm
+    print "WU:"
+    print sum(WU)
+    return sum(WU)
 
 
 def main():

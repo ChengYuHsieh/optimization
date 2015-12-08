@@ -15,7 +15,8 @@ def solver3(numSkill, numClass, LMMat, classMat, numSkillUBs): ### all inputs sh
         for i in range(numIntvl):
             mat[:,i] = mat[:,i] * LMVec[i]
         return mat
-
+    ### for heuristic
+    CA = np.zeros((numSkill, numClass))
     ### start solving
     assignmentMat = np.zeros((numSkill, numClass))
     for i in range(numSkill):
@@ -24,10 +25,11 @@ def solver3(numSkill, numClass, LMMat, classMat, numSkillUBs): ### all inputs sh
         maxIndxs = [n for n,m in enumerate(matRowSum) if m==max(matRowSum)]
         divisible = True if (numSkillUBs[i] % len(maxIndxs))==0 else False
         for j in maxIndxs:
+            CA[i,j] = 1
             assignmentMat[i,j] = numSkillUBs[i] / len(maxIndxs)
             if divisible == False:
                 assignmentMat[i,maxIndxs[0]] += numSkillUBs[i] - sum(assignmentMat[i,:])
-    return assignmentMat
+    return assignmentMat, CA
 
 def main():
     numS = int(raw_input("Number of skills: "))

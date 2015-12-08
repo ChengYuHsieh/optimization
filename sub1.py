@@ -1,5 +1,7 @@
 import numpy as np
 import sub3 as s3
+import heuristic
+import io
 import math
 
 def main():
@@ -7,7 +9,9 @@ def main():
     numS = int(raw_input("Number of single skills: "))
     timeI = int(raw_input("Number of time intervals: "))
     numC = int(raw_input("Number of class types: "))
-
+    fileName = raw_input("Input file name: ")
+    # parse input file
+    io.inputParser(fileName)
     # initialize lagrangian multipliers
     lagMul1 = np.zeros((numM, timeI))
     lagMul2 = np.zeros((numS, timeI))
@@ -33,6 +37,7 @@ def main():
 
         newLMs = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
                                 params[6], params[7], delta)
+    heuristic.heuristic((Dsi, WAs, WAm, classMat, CAs, CAm)
 
 def paramsGen(numM, numS, numC, timeI):
     # random ndarray in the range of 20
