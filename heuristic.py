@@ -93,20 +93,34 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
                                     for j in range(numIntvl):
                                         if classMat[co,j] == 1:
                                             WU[j] += 1
-                                            sumPsVec[j] += 1
+                                            Psi[s,j] += 1
                                         if classMat[ci,j] == 1:
                                             WU[j] -= 1
-                                            sumPsVec[j] -= 1
-                                    for k in range(i):
-                                        if WU[k] < 0 or sumPsVec[k] < 0:
+                                            Psi[s,j] -= 1
+                                    for k in range(numIntvl):
+                                        if Psi[s,k] < 0:
                                             WAs[s,co] += 1
                                             WAs[s,ci] -= 1
                                             hasMoved = False
-                                        for j in range(numIntvl):
-                                            if classMat[co,j] == 1:
-                                                WU[j] -= 1
-                                            if classMat[ci,j] == 1:
-                                                WU[j] += 1
+                                            for j in range(numIntvl):
+                                                if classMat[co,j] == 1:
+                                                    WU[j] -= 1
+                                                    Psi[s,j] -= 1
+                                                if classMat[ci,j] == 1:
+                                                    WU[j] += 1
+                                                    Psi[s,j] += 1
+                                    for k in range(i):
+                                        if WU[k] < 0:
+                                            WAs[s,co] += 1
+                                            WAs[s,ci] -= 1
+                                            hasMoved = False
+                                            for j in range(numIntvl):
+                                                if classMat[co,j] == 1:
+                                                    WU[j] -= 1
+                                                    Psi[s,j] -= 1
+                                                if classMat[ci,j] == 1:
+                                                    WU[j] += 1
+                                                    Psi[s,j] += 1
                                 if hasMoved == True:
                                     break
                             if hasMoved == True:
