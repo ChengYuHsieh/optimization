@@ -34,8 +34,8 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
                                         hasMoved = False
                             if hasMoved == True:           
                                 break
-                    if hasMoved == True:
-                        break
+                        if hasMoved == True:
+                            break
                 if hasMoved == False:
                     Psi[s,i] = 0
     
@@ -75,8 +75,8 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
                                             WU[j] += 1
                             if hasMoved == True:
                                 break
-                    if hasMoved == True:
-                        break
+                        if hasMoved == True:
+                            break
                 if hasMoved == True:
                     break
             if hasMoved == True:
@@ -109,8 +109,8 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
                                                 WU[j] += 1
                                 if hasMoved == True:
                                     break
-                        if hasMoved == True:
-                            break
+                            if hasMoved == True:
+                                break
                     if hasMoved == True:
                         break
             if hasMoved == False:
