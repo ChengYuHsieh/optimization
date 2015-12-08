@@ -34,5 +34,3 @@ WSs = map(int, lines[11+numS+numC+numM].split(' '))
 WSm = map(int, lines[13+numS+numC+numM].split(' '))
 
 
-#print WSs
-#print WSm
