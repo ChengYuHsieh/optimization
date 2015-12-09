@@ -62,8 +62,8 @@ def main():
     print newWAs, newWAm, newWU
     
     WU = 0
-    for i in wu.shape[0]:
-        for j in wu.shape[1]:
+    for i in range(wu.shape[0]):
+        for j in range(wu.shape[1]):
             WU += wu[i,j]  
     print "sum WU"
     print WU
