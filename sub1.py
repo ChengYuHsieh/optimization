@@ -9,9 +9,9 @@ def main():
     # numS = int(raw_input("Number of single skills: "))
     # timeI = int(raw_input("Number of time intervals: "))
     # numC = int(raw_input("Number of class types: "))
-    fileName = raw_input("Input file name: ")
+    # fileName = raw_input("Input file name: ")
     # parse input file
-    params = io.inputParser(fileName)
+    params = io.inputParser("inputForLag.txt")
     timeI = params[0]
     numS = params[1]
     numM = params[2]
@@ -33,7 +33,7 @@ def main():
     for i in range(numM):
         for j in range(numS):
             wrb[i,j] = WSm[i]
-    for i in range(1,10000):
+    for i in range(1,50):
         delta = delta / math.sqrt(i)
         #solver1, 2
         newWRA = solver1(lagMul1, lagMul2, wra, wrb)
@@ -44,10 +44,11 @@ def main():
         print newWU
 
         #solver3, 4
-        newWAs = s3.solver3(numS, numC, lagMul2, classMat, WSs)[0]
-        CAs = s3.solver3(numS, numC, lagMul2, classMat, WSs)[1]
-        newWAm = s3.solver3(numM, numC, lagMul1, classMat, WSm)[0]
-        CAm = s3.solver3(numM, numC, lagMul1, classMat, WSm)[1]
+        (newWAs, CAs) = s3.solver3(numS, numC, lagMul2, classMat, WSs)
+        # newWAs = s3.solver3(numS, numC, lagMul2, classMat, WSs)[0]
+        # CAs = s3.solver3(numS, numC, lagMul2, classMat, WSs)[1]
+        (newWAm, CAm) = s3.solver3(numM, numC, lagMul1, classMat, WSm)
+        # CAm = s3.solver3(numM, numC, lagMul1, classMat, WSm)[1]
         print 'updated WAs:'
         print newWAs
         print 'updated WAm:'
@@ -55,8 +56,11 @@ def main():
 
         newLMs = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
                                 classMat, demand, delta)
+    print "--------------------"
+    print "FINAL RESULT: WAs, WAm, WU"
     print newWAs, newWAm, newWU
-    heuristic.heuristic(Dsi, newWAs, newWAm, classMat, CAs, CAm)
+
+    # heuristic.heuristic(Dsi, newWAs, newWAm, classMat, CAs, CAm)
 
 # def paramsGen(numM, numS, numC, timeI):
     # # random ndarray in the range of 20

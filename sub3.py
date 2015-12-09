@@ -13,18 +13,23 @@ def solver3(numSkill, numClass, LMMat, classMat, numSkillUBs): ### all inputs sh
         mat = np.copy(classMat)
         numIntvl = mat.shape[1]
         for i in range(numIntvl):
+            print "LM loop"
+            print i
             mat[:,i] = mat[:,i] * LMVec[i]
         return mat
     ### for heuristic
     CA = np.zeros((numSkill, numClass))
     ### start solving
     assignmentMat = np.zeros((numSkill, numClass))
+    print numSkill
     for i in range(numSkill):
         mat = LMClassMat(classMat, LMMat[i,:])
         matRowSum = [sum(mat[k,:]) for k in range(mat.shape[0])]
         maxIndxs = [n for n,m in enumerate(matRowSum) if m==max(matRowSum)]
         divisible = True if (numSkillUBs[i] % len(maxIndxs))==0 else False
         for j in maxIndxs:
+            print "solver j loop"
+            print j
             CA[i,j] = 1
             assignmentMat[i,j] = numSkillUBs[i] / len(maxIndxs)
             if divisible == False:
