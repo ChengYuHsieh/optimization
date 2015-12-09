@@ -44,8 +44,10 @@ def main():
         print newWU
 
         #solver3, 4
-        newWAs = s3.solver3(numS, numC, lagMul2, classMat, WSs)
-        newWAm = s3.solver3(numM, numC, lagMul1, classMat, WSm)
+        newWAs = s3.solver3(numS, numC, lagMul2, classMat, WSs)[0]
+        CAs = s3.solver3(numS, numC, lagMul2, classMat, WSs)[1]
+        newWAm = s3.solver3(numM, numC, lagMul1, classMat, WSm)[0]
+        CAm = s3.solver3(numM, numC, lagMul1, classMat, WSm)[1]
         print 'updated WAs:'
         print newWAs
         print 'updated WAm:'
@@ -53,8 +55,8 @@ def main():
 
         newLMs = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
                                 classMat, demand, delta)
-    print WAs, WAm, newWU
-    heuristic.heuristic(Dsi, WAs, WAm, classMat, CAs, CAm)
+    print newWAs, newWAm, newWU
+    heuristic.heuristic(Dsi, newWAs, newWAm, classMat, CAs, CAm)
 
 # def paramsGen(numM, numS, numC, timeI):
     # # random ndarray in the range of 20
@@ -113,10 +115,6 @@ def subgradientsolver(lagmul1, lagmul2, newwra, newwu, newwas, newwam,
             for k in range(dim2[0]):
                 wrasum[i, j] += newwra[i, k, j]
             for c in range(dim3[0]):
-                print i, c, j
-                print newwam[i,c]
-                print classinfom[c,j]
-                print wamc[i,j]
                 wamc[i, j] = newwam[i, c]*classinfom[c, j]
             subgrad1[i, j] = wrasum[i, j]-wamc[i, j]
             newlagmul1[i, j] = lagmul1[i, j]+delta*subgrad1[i, j]
