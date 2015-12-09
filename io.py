@@ -35,3 +35,10 @@ def inputParser(fileName):
     WSm = map(int, lines[13+numS+numC+numM].split(' '))
 
     return numIntvl, numS, numM, numC, demand, classMat, Mss, WSs, WSm
+
+def main():
+    # fileName = raw_input("File name: ")
+    inputParser("inputForLag.txt")
+
+if __name__ == "__main__":
+    main()

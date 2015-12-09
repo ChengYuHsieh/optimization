@@ -5,58 +5,74 @@ import io
 import math
 
 def main():
-    numM = int(raw_input("Number of multiple skills: "))
-    numS = int(raw_input("Number of single skills: "))
-    timeI = int(raw_input("Number of time intervals: "))
-    numC = int(raw_input("Number of class types: "))
+    # numM = int(raw_input("Number of multiple skills: "))
+    # numS = int(raw_input("Number of single skills: "))
+    # timeI = int(raw_input("Number of time intervals: "))
+    # numC = int(raw_input("Number of class types: "))
     fileName = raw_input("Input file name: ")
     # parse input file
-    io.inputParser(fileName)
+    params = io.inputParser(fileName)
+    timeI = params[0]
+    numS = params[1]
+    numM = params[2]
+    numC = params[3]
+    demand = params[4]
+    classMat = params[5]
+    Mss = params[6]
+    WSs = params[7]
+    WSm = params[8]
     # initialize lagrangian multipliers
     lagMul1 = np.zeros((numM, timeI))
     lagMul2 = np.zeros((numS, timeI))
-    params = paramsGen(numM, numS, numC, timeI)
+    # params = paramsGen(numM, numS, numC, timeI)
     delta = 1
+    wra = np.zeros((numM, numS, timeI))
+    wrb = np.zeros((numM, numS))
+    wu = np.zeros((numS, timeI))
+    wub = demand
+    for i in range(numM):
+        for j in range(numS):
+            wrb[i,j] = WSm[i]
     for i in range(1,10000):
         delta = delta / math.sqrt(i)
         #solver1, 2
-        newWRA = solver1(lagMul1, lagMul2, params[0], params[1])
-        newWU = solver2(lagMul2, params[2], params[3])
+        newWRA = solver1(lagMul1, lagMul2, wra, wrb)
+        newWU = solver2(lagMul2, wu, wub)
         print 'updated WRA:'
         print newWRA
         print 'updated w/u:'
         print newWU
 
         #solver3, 4
-        newWAs = s3.solver3(numS, numC, lagMul2, params[6], params[4])
-        newWAm = s3.solver3(numM, numC, lagMul1, params[6], params[5])
+        newWAs = s3.solver3(numS, numC, lagMul2, classMat, WSs)
+        newWAm = s3.solver3(numM, numC, lagMul1, classMat, WSm)
         print 'updated WAs:'
         print newWAs
         print 'updated WAm:'
         print newWAm
 
         newLMs = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
-                                params[6], params[7], delta)
-    heuristic.heuristic((Dsi, WAs, WAm, classMat, CAs, CAm)
+                                classMat, demand, delta)
+    print WAs, WAm, newWU
+    heuristic.heuristic(Dsi, WAs, WAm, classMat, CAs, CAm)
 
-def paramsGen(numM, numS, numC, timeI):
-    # random ndarray in the range of 20
-    wra = np.zeros((numM, numS, timeI))
-    # wrb is the upper bound for wra
-    wrb = np.random.randint(20, size=numM*numS).reshape(numM, numS)
-    wu = np.zeros((numS, timeI))
-    # wu is the upper bound for wu
-    wub = np.random.randint(20, size=numS*timeI).reshape(numS, timeI)
-    # for sub3 and sub4
-    numSUBs = np.random.randint(20, size=numS)
-    numMUBs = np.random.randint(20, size=numM)
-    # class Matrix
-    classMat = np.random.randint(2, size=numC*timeI).reshape(numC,timeI)
-    # demand Matrix
-    demand = np.random.randint(5, size=numS*timeI).reshape(numS, timeI)
+# def paramsGen(numM, numS, numC, timeI):
+    # # random ndarray in the range of 20
+    # wra = np.zeros((numM, numS, timeI))
+    # # wrb is the upper bound for wra
+    # wrb = np.random.randint(20, size=numM*numS).reshape(numM, numS)
+    # wu = np.zeros((numS, timeI))
+    # # wu is the upper bound for wu
+    # wub = np.random.randint(20, size=numS*timeI).reshape(numS, timeI)
+    # # for sub3 and sub4
+    # numSUBs = np.random.randint(20, size=numS)
+    # numMUBs = np.random.randint(20, size=numM)
+    # # class Matrix
+    # classMat = np.random.randint(2, size=numC*timeI).reshape(numC,timeI)
+    # # demand Matrix
+    # demand = np.random.randint(5, size=numS*timeI).reshape(numS, timeI)
 
-    return [wra, wrb, wu, wub, numSUBs, numMUBs, classMat, demand]
-
+    # return [wra, wrb, wu, wub, numSUBs, numMUBs, classMat, demand]
 
 def solver1(lagMul1, lagMul2, wra, wrb):
     dim1 = lagMul1.shape
@@ -97,6 +113,10 @@ def subgradientsolver(lagmul1, lagmul2, newwra, newwu, newwas, newwam,
             for k in range(dim2[0]):
                 wrasum[i, j] += newwra[i, k, j]
             for c in range(dim3[0]):
+                print i, c, j
+                print newwam[i,c]
+                print classinfom[c,j]
+                print wamc[i,j]
                 wamc[i, j] = newwam[i, c]*classinfom[c, j]
             subgrad1[i, j] = wrasum[i, j]-wamc[i, j]
             newlagmul1[i, j] = lagmul1[i, j]+delta*subgrad1[i, j]
