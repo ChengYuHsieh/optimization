@@ -54,8 +54,10 @@ def main():
         print 'updated WAm:'
         print newWAm
 
-        newLMs = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
-                                classMat, demand, delta)
+        (lagMul1, lagMul2) = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
+                                classMat, demand, delta) 
+        # newLMs = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
+                                # classMat, demand, delta)
     print "--------------------"
     print "FINAL RESULT: WAs, WAm, WU"
     print newWAs, newWAm, newWU
