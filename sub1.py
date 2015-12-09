@@ -25,7 +25,7 @@ def main():
     lagMul1 = np.zeros((numM, timeI))
     lagMul2 = np.zeros((numS, timeI))
     # params = paramsGen(numM, numS, numC, timeI)
-    delta = 1
+    delta = 100
     wra = np.zeros((numM, numS, timeI))
     wrb = np.zeros((numM, numS))
     wu = np.zeros((numS, timeI))
@@ -56,13 +56,23 @@ def main():
 
         (lagMul1, lagMul2) = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
                                 classMat, demand, delta) 
-        # newLMs = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
-                                # classMat, demand, delta)
+    
     print "--------------------"
     print "FINAL RESULT: WAs, WAm, WU"
     print newWAs, newWAm, newWU
+    
+    WU = 0
+    for i in wu.shape[0]:
+        for j in wu.shape[1]:
+            WU += wu[i,j]  
+    print "sum WU"
+    print WU
+    return WU
+    
+    print "------------------"
+    print "starting heuristic"
 
-    # heuristic.heuristic(Dsi, newWAs, newWAm, classMat, CAs, CAm)
+    heuristic.heuristic(Dsi, newWAs, newWAm, classMat, CAs, CAm)
 
 # def paramsGen(numM, numS, numC, timeI):
     # # random ndarray in the range of 20
@@ -126,6 +136,7 @@ def subgradientsolver(lagmul1, lagmul2, newwra, newwu, newwas, newwam,
             newlagmul1[i, j] = lagmul1[i, j]+delta*subgrad1[i, j]
             if newlagmul1[i, j] < 0:
                 newlagmul1[i, j] = 0
+    print "subgrad1:"
     print subgrad1
 
     subgrad2 = np.zeros((dim2[0], dim2[1]))
@@ -143,6 +154,7 @@ def subgradientsolver(lagmul1, lagmul2, newwra, newwu, newwas, newwam,
             newlagmul2[i, j] = lagmul2[i, j]+delta*subgrad2[i, j]
             if newlagmul2[i, j] < 0:
                 newlagmul2[i, j] = 0
+    print "subgrad2:"
     print subgrad2
 
     return [newlagmul1, newlagmul2]
