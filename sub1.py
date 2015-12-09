@@ -33,7 +33,7 @@ def main():
     for i in range(numM):
         for j in range(numS):
             wrb[i,j] = WSm[i]
-    for i in range(1,50):
+    for i in range(1,2):
         delta = delta / math.sqrt(i)
         #solver1, 2
         newWRA = solver1(lagMul1, lagMul2, wra, wrb)
@@ -67,12 +67,12 @@ def main():
             WU += wu[i,j]  
     print "sum WU"
     print WU
-    return WU
+    # return WU
     
     print "------------------"
     print "starting heuristic"
 
-    heuristic.heuristic(Dsi, newWAs, newWAm, classMat, CAs, CAm)
+    heuristic.heuristic(demand, newWAs, newWAm, classMat, CAs, CAm)
 
 # def paramsGen(numM, numS, numC, timeI):
     # # random ndarray in the range of 20

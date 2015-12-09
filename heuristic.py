@@ -3,10 +3,13 @@ import numpy as np
 def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), class available for each skill 
     numS = WAs.shape[0]
     numM = WAm.shape[0]
-    numIntvl = WAs.shape[1]
+    numC = classMat.shape[0]
+    numIntvl = classMat.shape[1]
     WIs = np.dot(WAs, classMat) # table(row of skill s, col of intvl i)
     Psi = Dsi - WIs
     for s in range(numS):
+        print "first stage"
+        print s
         for i in range(numIntvl):
             while Psi[s,i] < 0:
                 hasMoved = False
@@ -18,6 +21,7 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
                                 WAs[s,ci] += 1
                                 hasMoved = True
                                 for k in range(numIntvl):
+                                    print k
                                     if classMat[co,k] == 1:
                                         Psi[s,k] += 1
                                     if classMat[ci,k] == 1:
@@ -48,6 +52,8 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
         WU = sumPsVec - sumPsmVec
 
     for i in range(numIntvl):
+        print "second stage"
+        print i
         while WU[i] < 0:
             hasMoved = False
             for s in range(numM):
