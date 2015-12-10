@@ -14,17 +14,17 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
             while Psi[s,i] < 0:
                 hasMoved = False
                 for co in range(numC):
-                    print "co1:"
-                    print co
                     if CAs[s,co] == 1 and classMat[co,i] == 1:
                         for ci in range(numC):
-                            print "ci1"
-                            print ci
                             if CAs[s,ci] == 1 and classMat[ci,i] == 0:
                                 WAs[s,co] -= 1
                                 WAs[s,ci] += 1
                                 hasMoved = True
                                 for k in range(numIntvl):
+                                    print "co1"
+                                    print co
+                                    print "ci1"
+                                    print ci
                                     print "k1"
                                     print k
                                     if classMat[co,k] == 1:
@@ -65,17 +65,17 @@ def heuristic(Dsi, WAs, WAm, classMat, CAs, CAm): # matrix of dim(numS, numC), c
             hasMoved = False
             for s in range(numM):
                 for co in range(numC):
-                    print "co2"
-                    print co
                     if CAm[s,co] == 1 and classMat[co,i] == 1:
                         for ci in range(numC):
-                            print "ci2"
-                            print ci
                             if CAm[s,ci] == 1 and classMat[ci,i] == 0:
                                 WAm[s,co] -= 1
                                 WAm[s,ci] += 1
                                 hasMoved = True
                                 for j in range(numIntvl):
+                                    print "co2"
+                                    print co
+                                    print "ci2"
+                                    print ci
                                     print "j"
                                     print j
                                     if classMat[co,j] == 1:
