@@ -1,6 +1,6 @@
 import numpy as np
 import sub3 as s3
-import heuristic
+import heuristic2
 import io
 import math
 
@@ -72,7 +72,9 @@ def main():
     print "------------------"
     print "starting heuristic"
 
-    heuristic.heuristic(demand, newWAs, newWAm, classMat, CAs, CAm)
+    print "heuristic WU:"
+    print heuristic2.heuristic(newWAs, newWAm, classMat, demand)
+
 
 # def paramsGen(numM, numS, numC, timeI):
     # # random ndarray in the range of 20
