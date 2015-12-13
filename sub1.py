@@ -4,14 +4,14 @@ import heuristic2
 import io
 import math
 
-def main():
+def solve(fileName):
     # numM = int(raw_input("Number of multiple skills: "))
     # numS = int(raw_input("Number of single skills: "))
     # timeI = int(raw_input("Number of time intervals: "))
     # numC = int(raw_input("Number of class types: "))
     # fileName = raw_input("Input file name: ")
     # parse input file
-    params = io.inputParser("inputForLag.txt")
+    params = io.inputParser(fileName)
     timeI = params[0]
     numS = params[1]
     numM = params[2]
@@ -33,7 +33,7 @@ def main():
     for i in range(numM):
         for j in range(numS):
             wrb[i,j] = WSm[i]
-    for i in range(1,2):
+    for i in range(1,100):
         delta = delta / math.sqrt(i)
         #solver1, 2
         newWRA = solver1(lagMul1, lagMul2, wra, wrb)
@@ -159,7 +159,18 @@ def subgradientsolver(lagmul1, lagmul2, newwra, newwu, newwas, newwam,
     print "subgrad2:"
     print subgrad2
 
+    oneMat = np.ones((dim2[0], dim2[1]))
+    oneMinusPi = oneMat - lagmul2
+    firstElem = oneMinusPi * newwu
+    
+    print "wra shape"
+    print newwra.shape
+    # sumSmWRA = 
+
     return [newlagmul1, newlagmul2]
+
+def main():
+    solve("inputForLag.txt")
 
 if __name__ == "__main__":
     main()
