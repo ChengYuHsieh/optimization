@@ -67,13 +67,15 @@ def solve(fileName):
             WU += wu[i,j]  
     print "sum WU"
     print WU
-    # return WU
     
     print "------------------"
     print "starting heuristic"
 
+    FWU = heuristic2.heuristic(newWAs, newWAm, classMat, demand)
+
     print "heuristic WU:"
-    print heuristic2.heuristic(newWAs, newWAm, classMat, demand)
+    print FWU
+    return FWU
 
 
 # def paramsGen(numM, numS, numC, timeI):
