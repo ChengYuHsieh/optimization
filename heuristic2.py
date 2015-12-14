@@ -1,6 +1,6 @@
 import numpy as np
 
-def heuristic(WAs, WAm, classMat, Dsi):
+def heuristic(WAs, WAm, classMat, Dsi, Mss):
     numS = WAs.shape[0]
     numM = WAm.shape[0]
     numIntvl = classMat.shape[1]
@@ -11,24 +11,34 @@ def heuristic(WAs, WAm, classMat, Dsi):
     sumPsmVec = [sum(WIm[:,i]) for i in range(WIm.shape[1])] # vector of length numIntvl, col sum of WIm
     
     Psi = [ map(lambda x: 0 if x<0 else x, xs) for xs in Psi ]
-
-    WU = np.zeros(numIntvl)
+    Psi = np.array(Psi).reshape(numS, numIntvl)
     for i in range(numIntvl):
-        WU[i] = sumPsVec[i] - sumPsmVec[i]
-    WU = map(lambda x: 0 if x<0 else x, WU)
+        for s in range(numS):
+            for m in range(numM):
+                if Psi[s,i]>0:
+                    if Mss[m,s]==1:
+                        Psi[s,i]-= WIm[m,s]
+                        WIm[m,s]=0
+                        if Psi[s,i]< 0:
+                            WIm[m,s]=-Psi[s,i]
+                            Psi[s,i]=0
+                        else:
+                            break
+    result = 0
+    for i in range(numIntvl):
+        for s in range(numS):
+            result += Psi[s,i]
+    return result
 
-    # print sum(WU)
-    return sum(WU)
-
-
-    
 
 def main():
     WAs = np.random.randint(10, size=10*1000).reshape(10,1000)
     WAm = np.random.randint(10, size=50*1000).reshape(50,1000)
     classMat = np.random.randint(2, size=1000*672).reshape(1000,672)
     Dsi = np.random.randint(20000, size=10*672).reshape(10, 672)
-    heuristic(WAs, WAm, classMat, Dsi)
+    Mss = np.random.randint(2, size=50*10).reshape(50,10)
+
+    heuristic(WAs, WAm, classMat, Dsi, Mss)
     
 
 
