@@ -1,6 +1,7 @@
 import numpy as np
 import sub3 as s3
 import heuristic2
+import heuristic3
 import io
 import math
 
@@ -30,21 +31,26 @@ def solve(fileName):
     lag = 1
     smallflag = 0
     contiflag = 0
+    stop = 100
     for i in range(numM):
         for j in range(numS):
             wrb[i,j] = WSm[i]
-    for i in range(1,50):
+    for i in range(1,100):
         print "Round"
         print i
-        delta = delta / math.sqrt(100-i)
+        delta = stop
         if abs(lag-prelag)/(abs(prelag)+0.001)< 0.005:
             smallflag += 1
         else:
             smallflag = 0 
-        if smallflag == 3:
+        if smallflag == 2:
+            delta = delta + i / 2
+        if smallflag == 4 :
             contiflag += 1
-            delta = delta + i    
-            smallflag = 0
+            smallflag = 0 
+            delta = delta + i / 2   
+        if lag < prelag :
+            delta = 100
         prelag = lag
         #solver1, 2
         newWRA = solver1(lagMul1, lagMul2, wra, wrb)
@@ -55,8 +61,8 @@ def solve(fileName):
 
         (lagMul1, lagMul2, stop , lag) = subgradientsolver(lagMul1, lagMul2, newWRA, newWU, newWAs, newWAm,
                                 classMat, demand, delta)
- 	if stop == 0 or contiflag > 2:
- 	    break 
+    if stop == 0 or contiflag > 5:
+        break 
     
     print "--------------------"
     print "FINAL RESULT: WAs, WAm, WU"
@@ -72,7 +78,8 @@ def solve(fileName):
     print "------------------"
     print "starting heuristic"
 
-    FWU = heuristic2.heuristic(newWAs, newWAm, classMat, demand , Mss)
+    # FWU = heuristic2.heuristic(newWAs, newWAm, classMat, demand, Mss)
+    FWU = heuristic3.heuristic(demand ,newWAs, newWAm, classMat, Mss, CAs, CAm)
 
     print "heuristic WU:"
     print FWU
@@ -138,7 +145,7 @@ def subgradientsolver(lagmul1, lagmul2, newwra, newwu, newwas, newwam,
     for i in range(dim2[0]):
         for j in range(dim2[1]):
             for k in range(dim1[0]):
-                wrasum[i, j] = newwra[k, i, j]
+                wrasum[i, j] += newwra[k, i, j]
             for c in range(dim3[0]):
                 wasc[i, j] = newwas[i, c]*classinfom[c, j]
             subgrad2[i, j] = demand[i, j]-wrasum[i, j]-wasc[i, j]-newwu[i, j]
